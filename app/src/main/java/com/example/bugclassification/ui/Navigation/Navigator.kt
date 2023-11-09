@@ -9,6 +9,8 @@ import com.example.bugclassification.ui.Screen.DetailScreen
 import com.example.bugclassification.ui.Screen.InfenceScreen
 import com.example.bugclassification.ui.Screen.MainScreen
 import com.example.bugclassification.ui.Screen.ProductScreen
+import com.example.bugclassification.ui.Screen.SearchScreen
+import com.example.bugclassification.ui.Screen.UserScreen
 
 @Composable
 fun Navigator() {
@@ -16,6 +18,8 @@ fun Navigator() {
 
     NavHost(navController = navController, startDestination = Screen.Main.route){
         composable(Screen.Main.route) { MainScreen(navController) }
+        composable(Screen.Search.route) { SearchScreen(navController) }
+        composable(Screen.User.route) { UserScreen(navController) }
         composable(Screen.Inference.route) { InfenceScreen(navController) }
         composable(Screen.Detail.route) { DetailScreen(navController) }
         composable(Screen.Product.route) { ProductScreen(navController) }

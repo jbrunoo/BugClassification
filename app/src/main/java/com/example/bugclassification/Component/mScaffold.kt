@@ -24,11 +24,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.bugclassification.ui.Navigation.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun mScaffold(content: @Composable (PaddingValues) -> Unit) {
+fun MyScaffold(navController: NavController, content: @Composable (PaddingValues) -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -45,19 +48,19 @@ fun mScaffold(content: @Composable (PaddingValues) -> Unit) {
         bottomBar = {
             BottomAppBar(
                 content = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
                         Icon(
                             imageVector = Icons.Outlined.ImportContacts, contentDescription = null,
                             tint = Color(color = 0xDF1296FF)
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Screen.Main.route) }) {
                         Icon(
                             imageVector = Icons.Outlined.Home, contentDescription = null,
                             tint = Color(color = 0xDF1296FF)
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Screen.User.route) }) {
                         Icon(
                             imageVector = Icons.Outlined.AccountCircle, contentDescription = null,
                             tint = Color(color = 0xDF1296FF)
