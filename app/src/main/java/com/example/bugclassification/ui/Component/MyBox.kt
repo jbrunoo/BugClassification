@@ -1,4 +1,4 @@
-package com.example.bugclassification.Component
+package com.example.bugclassification.ui.Component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.bugclassification.ui.Navigation.Screen
-import com.example.bugclassification.ui.Screen.ProductScreen
 
 @Composable
-fun MyBox() {
+fun BottomRow() {
     val navController = rememberNavController()
-
     Row {
         Column {
             Text(text = "살충 방법 및 방역 업체 확인")

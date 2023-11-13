@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.bugclassification.Component.MyScaffold
+import com.example.bugclassification.ui.Component.MyScaffold
 
 @Composable
 fun CompanyScreen(navController: NavController) {

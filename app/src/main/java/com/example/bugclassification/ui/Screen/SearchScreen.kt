@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.bugclassification.Component.MyScaffold
+import com.example.bugclassification.ui.Component.MyScaffold
 
 @Composable
 fun SearchScreen(navController: NavController) {
