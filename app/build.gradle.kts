@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        mlModelBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -59,6 +61,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.room:room-common:2.6.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -71,10 +75,18 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     // landscapist glide
     implementation("com.github.skydoves:landscapist-glide:2.2.12")
-
+    // viewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    // room
+    val roomVersion = "2.6.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
-//    implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
-//    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
-//    implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
+    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    implementation("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:0.5.2")
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,9 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,9 +41,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bugclassification.ui.Component.MyScaffold
+import com.example.bugclassification.ui.Component.sendImageFileToServer
 import com.example.bugclassification.ui.Navigation.Screen
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.kotlinx.dl.onnx.inference.ONNXModelHub
+import org.jetbrains.kotlinx.dl.onnx.inference.ONNXModels
+import org.jetbrains.kotlinx.dl.onnx.inference.OnnxInferenceModel
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
@@ -66,6 +73,10 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
             onResult = { photo ->
                 mainViewModel.setBitmap(photo)
             })
+    val bitmap: Bitmap? = uiState.bitmap
+
+    var respond : String? = "no"
+
     MyScaffold(navController = navController,
         content = {
             Box(
@@ -106,62 +117,80 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
                         fontWeight = FontWeight.ExtraLight,
                         color = Color(0xDF0D80DB)
                     )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter,
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                ) {
-                    OutlinedButton(
-                        border = BorderStroke(1.dp, Color(0xDF0D80DB)),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color(0xDF0D80DB)
-                        ),
-                        onClick = {
-                            launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        },
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(imageVector = Icons.Outlined.Image, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "이미지")
-                    }
-                    Spacer(modifier = Modifier.width(48.dp))
-                    Button(
-                        onClick = {
-                            // 기본 카메라 앱 실행
-                            cameraLauncher.launch(null)
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xDF0D80DB),
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.PhotoCamera,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "갤러리")
-                    }
-                    Button(
-                        onClick = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                key = "bitmap",
-                                value = uiState.bitmap
+                        OutlinedButton(
+                            border = BorderStroke(1.dp, Color(0xDF0D80DB)),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = Color.White,
+                                contentColor = Color(0xDF0D80DB)
+                            ),
+                            onClick = {
+                                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            },
+                        ) {
+                            Icon(imageVector = Icons.Outlined.Image, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = "이미지")
+                        }
+                        Spacer(modifier = Modifier.width(48.dp))
+                        Button(
+                            onClick = {
+                                // 기본 카메라 앱 실행
+                                cameraLauncher.launch(null)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xDF0D80DB),
+                                contentColor = Color.White
                             )
-                            navController.navigate(Screen.Inference.route)
-                        },
-                        enabled = uiState.bitmap != null
-                    ) {
-                        Text(text = "dddddd")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.PhotoCamera,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = "갤러리")
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.BottomCenter,
+                ) {
+                    Row {
+                        Button(
+                            onClick = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    key = "bitmap",
+                                    value = uiState.bitmap
+                                )
+                                navController.navigate(Screen.Inference.route)
+                            },
+                            enabled = uiState.bitmap != null
+                        ) {
+                            Text(text = "dddddd")
+                        }
+                        Button(onClick = {
+                            if(bitmap != null){
+                                GlobalScope.launch {
+                                    val result = withContext(Dispatchers.Default) {
+                                        sendImageFileToServer(context, bitmap)
+                                    }
+                                    withContext(Dispatchers.Main) {
+                                        respond = result
+                                    }
+                                }
+
+                            }
+                        }) {
+                            Text(text = "예측")
+                        }
+                        Text(text = "$respond")
                     }
                 }
             }
@@ -181,3 +210,29 @@ fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
         inputStream?.close()
     }
 }
+
+//fun bitmapToFloatArray(bitmap: Bitmap, inputSize: LongArray): FloatArray {
+//    val width = bitmap.width
+//    val height = bitmap.height
+//
+//    val floatArray = FloatArray(inputSize.reduce { acc, dim -> acc * dim.toInt() }.toInt())
+//
+//    var index = 0
+//    for (y in 0 until height) {
+//        for (x in 0 until width) {
+//            val pixel = bitmap.getPixel(x, y)
+//
+//            // Extracting RGB values
+//            val red = (pixel shr 16 and 0xFF).toFloat() / 255.0f
+//            val green = (pixel shr 8 and 0xFF).toFloat() / 255.0f
+//            val blue = (pixel and 0xFF).toFloat() / 255.0f
+//
+//            // Storing the values in the float array
+//            floatArray[index++] = red
+//            floatArray[index++] = green
+//            floatArray[index++] = blue
+//        }
+//    }
+//
+//    return floatArray
+//}

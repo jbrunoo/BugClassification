@@ -11,6 +11,8 @@ import com.example.bugclassification.ui.Navigation.Navigator
 import com.example.bugclassification.ui.theme.BugClassificationTheme
 
 class MainActivity : ComponentActivity() {
+    private val serverUrl = "http://127.0.0.1:5000"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

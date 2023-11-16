@@ -7,12 +7,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.bugclassification.ui.Navigation.Screen
 
 @Composable
-fun BottomRow() {
-    val navController = rememberNavController()
+fun BottomRow(navController: NavController) {
     Row {
         Column {
             Text(text = "살충 방법 및 방역 업체 확인")

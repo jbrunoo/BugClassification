@@ -67,6 +67,6 @@ fun InferenceScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomCenter,
     ) {
-        BottomRow()
+        BottomRow(navController)
     }
 }
