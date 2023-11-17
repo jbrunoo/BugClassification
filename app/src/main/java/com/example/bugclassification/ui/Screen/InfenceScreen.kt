@@ -22,7 +22,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun InferenceScreen(navController: NavController) {
+fun InferenceScreen(navController: NavController, predictedClass: String?, confidence: Int?) {
     val bitmap = remember {
         navController.previousBackStackEntry?.savedStateHandle?.get<Bitmap>("bitmap")
     }
@@ -36,10 +36,10 @@ fun InferenceScreen(navController: NavController) {
             )
         )
         // 추론된 정확도 값 표시
-        Text(text = "정확도 : {~~%}")
+        Text(text = "정확도 : $confidence")
         // main에서 사용자가 입력한 image
-        Text(text = "title : {벌레 종류}") // 추론된 벌레 종류 받기
-        Text(text = "{벌레 이름}") // 추론된 벌레 이름 받기
+        Text(text = "title : {바퀴목}") // 추론된 벌레 종류 받기
+        Text(text = "$predictedClass") // 추론된 벌레 이름 받기
         // 추론된 결과 값 받아 firebase에 넣어둔 벌레 detail 정보 값 가져오기
         Text(
             text = "상세보기",

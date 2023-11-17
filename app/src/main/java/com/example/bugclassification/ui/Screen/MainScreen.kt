@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,41 +45,48 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bugclassification.ui.Component.MyScaffold
-import com.example.bugclassification.ui.Component.saveBitmapToFile
-import com.example.bugclassification.ui.Component.uploadImage
+import com.example.bugclassification.ui.Component.bitmapToUri
 import com.example.bugclassification.ui.Navigation.Screen
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
+import java.net.URLEncoder
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun MainScreen(navController: NavController, mainViewModel: MainViewModel = viewModel()) {
-    val uiState by mainViewModel.uiState.collectAsState()
 
     val context = LocalContext.current
+    var selectUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    var takenPhoto by remember {
+        mutableStateOf<Bitmap?>(null)
+    }
     val launcher = // 갤러리 이미지 런쳐
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia(),
             onResult = { uri ->
-                mainViewModel.setBitmap(uri?.let { uriToBitmap(it, context) })
+                if (uri != null) {
+                    selectUri = uri
+                    takenPhoto = null
+                }
             }
         )
     val cameraLauncher = // 카메라 이미지 런쳐
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview(),
             onResult = { photo ->
-                mainViewModel.setBitmap(photo)
+                if(photo != null) {
+                    takenPhoto = photo
+                    selectUri = bitmapToUri(context, takenPhoto!!)
+                }
             })
-    val bitmap: Bitmap? = uiState.bitmap
 
-    if(bitmap != null) {
-        val imageFile = saveBitmapToFile(context, bitmap)
-    }
-    var respond : String? = "no"
+    var result: String? = "no"
+
+    val bitmap: Bitmap? = selectUri?.let { uriToBitmap(it, context) }?: takenPhoto
 
     MyScaffold(navController = navController,
         content = {
@@ -89,10 +100,10 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (uiState.bitmap != null) {
+                    if (bitmap != null) {
                         GlideImage(
                             modifier = Modifier.size(250.dp),
-                            imageModel = { uiState.bitmap }, // loading a network image using an URL.
+                            imageModel = { bitmap }, // loading a network image using an URL.
                             imageOptions = ImageOptions(
                                 contentScale = ContentScale.Crop,
                                 alignment = Alignment.Center
@@ -162,31 +173,16 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
                         .fillMaxSize(),
                     contentAlignment = Alignment.BottomCenter,
                 ) {
-                    Row {
-                        Button(
-                            onClick = {
-                                navController.currentBackStackEntry?.savedStateHandle?.set(
-                                    key = "bitmap",
-                                    value = uiState.bitmap
-                                )
-                                navController.navigate(Screen.Inference.route)
-                            },
-                            enabled = uiState.bitmap != null
-                        ) {
-                            Text(text = "dddddd")
+                    Button(onClick = {
+                        if (selectUri != null) {
+                            val encodedUri = URLEncoder.encode(selectUri.toString(), "UTF-8")
+                            navController.navigate("loading/${encodedUri}")
+                            Toast.makeText(context, "$encodedUri", Toast.LENGTH_SHORT).show()
                         }
-                        Button(onClick = {
-                            if(bitmap != null){
-                                GlobalScope.launch {
-//                                    val result = uploadImage(imageF)
-                                }
-
-                            }
-                        }) {
-                            Text(text = "예측")
-                        }
-                        Text(text = "$respond")
+                    }) {
+                        Text(text = "예측")
                     }
+                    Text(text = "$result")
                 }
             }
         })
