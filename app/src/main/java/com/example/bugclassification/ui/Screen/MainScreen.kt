@@ -41,21 +41,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bugclassification.ui.Component.MyScaffold
-import com.example.bugclassification.ui.Component.sendImageFileToServer
+import com.example.bugclassification.ui.Component.saveBitmapToFile
+import com.example.bugclassification.ui.Component.uploadImage
 import com.example.bugclassification.ui.Navigation.Screen
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.jetbrains.kotlinx.dl.onnx.inference.ONNXModelHub
-import org.jetbrains.kotlinx.dl.onnx.inference.ONNXModels
-import org.jetbrains.kotlinx.dl.onnx.inference.OnnxInferenceModel
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun MainScreen(navController: NavController, mainViewModel: MainViewModel = viewModel()) {
     val uiState by mainViewModel.uiState.collectAsState()
@@ -75,6 +72,9 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
             })
     val bitmap: Bitmap? = uiState.bitmap
 
+    if(bitmap != null) {
+        val imageFile = saveBitmapToFile(context, bitmap)
+    }
     var respond : String? = "no"
 
     MyScaffold(navController = navController,
@@ -178,12 +178,7 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
                         Button(onClick = {
                             if(bitmap != null){
                                 GlobalScope.launch {
-                                    val result = withContext(Dispatchers.Default) {
-                                        sendImageFileToServer(context, bitmap)
-                                    }
-                                    withContext(Dispatchers.Main) {
-                                        respond = result
-                                    }
+//                                    val result = uploadImage(imageF)
                                 }
 
                             }
@@ -210,29 +205,3 @@ fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
         inputStream?.close()
     }
 }
-
-//fun bitmapToFloatArray(bitmap: Bitmap, inputSize: LongArray): FloatArray {
-//    val width = bitmap.width
-//    val height = bitmap.height
-//
-//    val floatArray = FloatArray(inputSize.reduce { acc, dim -> acc * dim.toInt() }.toInt())
-//
-//    var index = 0
-//    for (y in 0 until height) {
-//        for (x in 0 until width) {
-//            val pixel = bitmap.getPixel(x, y)
-//
-//            // Extracting RGB values
-//            val red = (pixel shr 16 and 0xFF).toFloat() / 255.0f
-//            val green = (pixel shr 8 and 0xFF).toFloat() / 255.0f
-//            val blue = (pixel and 0xFF).toFloat() / 255.0f
-//
-//            // Storing the values in the float array
-//            floatArray[index++] = red
-//            floatArray[index++] = green
-//            floatArray[index++] = blue
-//        }
-//    }
-//
-//    return floatArray
-//}

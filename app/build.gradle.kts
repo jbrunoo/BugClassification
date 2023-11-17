@@ -89,4 +89,13 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:0.5.2")
+
+    // Retrofit 라이브러리
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+// Gson 변환기 라이브러리
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// Scalars 변환기 라이브러리
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
 }
