@@ -1,24 +1,23 @@
 package com.example.bugclassification.data
 
-import androidx.room.Delete
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
-
-interface BugDao {
-    @Query("SELECT * FROM bug")
-    fun getAll(): List<Bug>
-
-    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<Bug>
-
-    @Query("SELECT * FROM bug WHERE first_name LIKE :first AND " +
-            "last_name LIKE :last LIMIT 1")
-    fun findByName(first: String, last: String): Bug
-
+@Dao
+interface BugInfoDao {
     @Insert
-    fun insertAll(vararg bugs: Bug)
+    suspend fun insertBugInfo(bug: Bug)
 
-    @Delete
-    fun delete(user: Bug)
+    @Query("SELECT * FROM bug_info WHERE bugType = :bugType")
+    suspend fun getBugInfoByType(bugType: String): Bug?
+}
+
+@Dao
+interface InferenceInfoDao {
+    @Insert
+    suspend fun insertInferenceInfo(inference: Inference)
+
+    @Query("SELECT * FROM inference_info WHERE bug_type = :bugType")
+    suspend fun getInferenceInfoByBugType(bugType: String): Inference?
 }

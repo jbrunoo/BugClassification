@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.bugclassification.ui.Navigation.Screen
+import com.example.bugclassification.Navigation.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)

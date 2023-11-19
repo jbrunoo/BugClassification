@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.bugclassification.ui.Navigation.Screen
+import com.example.bugclassification.Navigation.Screen
 
 @Composable
 fun BottomRow(navController: NavController) {

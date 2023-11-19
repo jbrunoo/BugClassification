@@ -20,7 +20,7 @@ class ApiManager {
     suspend fun uploadImage(context: Context, imageUri: Uri): Pair<String?, Int?> =
         withContext(Dispatchers.IO) {
             // navDeepLink
-            val url = "http://192.168.1.53:5000/predict"
+            val url = "http://192.168.0.5:5000/predict"
             val client = OkHttpClient()
             val inputStream = context.contentResolver.openInputStream(imageUri)
             val file = createFileFromInputStream(inputStream)

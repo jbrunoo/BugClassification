@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
-    id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -79,9 +79,11 @@ dependencies {
     // viewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     // room
-    val roomVersion = "2.6.0"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    val room_version = "2.5.0" // 2.6.0은 버전 에러 많음.
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
 
     implementation("org.tensorflow:tensorflow-lite:2.14.0")
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
