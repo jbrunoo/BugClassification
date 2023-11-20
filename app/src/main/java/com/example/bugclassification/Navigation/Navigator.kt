@@ -35,6 +35,9 @@ fun Navigator() {
             val bugType = it.arguments?.getString("bugType")
             DetailScreen(navController, bugType, bugRepository)
         }
-        composable(Screen.Product.route) { ProductScreen(navController) }
+        composable(Screen.Product.route + "/{bugType}") {
+            val bugType = it.arguments?.getString("bugType")
+            ProductScreen(navController, bugType)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.bugclassification.ui.Component
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,24 +34,10 @@ import com.example.bugclassification.Navigation.Screen
 fun MyScaffold(navController: NavController, content: @Composable (PaddingValues) -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(
-                        "이 벌레 뭔가요?",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        color = Color(color = 0xDF1296FF)
-                    )
-                }
-            )
-        },
         bottomBar = {
             BottomAppBar(
+                modifier = Modifier.border(0.5.dp, Color(color = 0xB281C5FC)),
+                containerColor = Color.White,
                 content = {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

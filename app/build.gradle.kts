@@ -92,4 +92,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    // lottie animation
+    implementation("com.airbnb.android:lottie:3.4.0")
 }

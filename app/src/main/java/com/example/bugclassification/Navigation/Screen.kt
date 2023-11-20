@@ -6,5 +6,5 @@ sealed class Screen(val route: String) {
     object User : Screen("user")
     object Inference : Screen("inference/{bugType}")
     object Detail : Screen("Detail/{bugType}")
-    object Product : Screen("product")
+    object Product : Screen("product/{bugType}")
 }
