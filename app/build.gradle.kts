@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.room:room-common:2.6.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
+    implementation("androidx.browser:browser:1.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -94,4 +95,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
     // lottie animation
     implementation("com.airbnb.android:lottie:3.4.0")
+    //settings screen 코드 merge
+
 }

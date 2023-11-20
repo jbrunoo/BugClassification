@@ -135,6 +135,5 @@ fun DetailScreen(navController: NavController, bugType: String?, bugRepository: 
         ) {
             BottomRow(navController, bugType)
         }
-
     }
 }

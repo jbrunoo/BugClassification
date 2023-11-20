@@ -12,7 +12,10 @@ import com.example.bugclassification.ui.Screen.InferenceScreen
 import com.example.bugclassification.ui.Screen.MainScreen
 import com.example.bugclassification.ui.Screen.ProductScreen
 import com.example.bugclassification.ui.Screen.SearchScreen
-import com.example.bugclassification.ui.Screen.UserScreen
+import com.example.bugclassification.ui.Screen.SlideMenuScreen.BugListScreen
+import com.example.bugclassification.ui.Screen.SlideMenuScreen.CustomerInquiriesScreen
+import com.example.bugclassification.ui.Screen.SlideMenuScreen.UserProfileScreen
+import com.example.bugclassification.ui.Screen.SlideMenuScreen.UserSettingsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -26,7 +29,6 @@ fun Navigator() {
     NavHost(navController = navController, startDestination = Screen.Main.route) {
         composable(Screen.Main.route) { MainScreen(navController, bugRepository) }
         composable(Screen.Search.route) { SearchScreen(navController) }
-        composable(Screen.User.route) { UserScreen(navController) }
         composable(Screen.Inference.route + "/{bugType}") {
             val bugType = it.arguments?.getString("bugType")
             InferenceScreen(navController, bugType, bugRepository)
@@ -39,5 +41,10 @@ fun Navigator() {
             val bugType = it.arguments?.getString("bugType")
             ProductScreen(navController, bugType)
         }
+        // Setting 관련 화면들
+        composable(SettingScreen.BugList.route) { BugListScreen() }
+        composable(SettingScreen.UserProfile.route) { UserProfileScreen() }
+        composable(SettingScreen.UserSettings.route) { UserSettingsScreen() }
+        composable(SettingScreen.CustomerInq.route) { CustomerInquiriesScreen() }
     }
 }
