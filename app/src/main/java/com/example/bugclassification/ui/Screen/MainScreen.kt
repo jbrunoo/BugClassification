@@ -42,13 +42,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.bugclassification.Navigation.Screen
 import com.example.bugclassification.data.BugRepository
 import com.example.bugclassification.data.Inference
 import com.example.bugclassification.network.ApiManager
 import com.example.bugclassification.ui.Component.LoadingAnimation
 import com.example.bugclassification.ui.Component.MyScaffold
 import com.example.bugclassification.ui.Component.bitmapToUri
-import com.example.bugclassification.Navigation.Screen
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -96,12 +96,12 @@ fun MainScreen(navController: NavController, bugRepository: BugRepository) {
 
 
     if (loading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            LoadingAnimation()
+        Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.align(Alignment.Center)) {
+                LoadingAnimation(Modifier.fillMaxSize())
+            }
         }
+
     } else {
         MyScaffold(navController = navController,
             content = {
@@ -130,18 +130,23 @@ fun MainScreen(navController: NavController, bugRepository: BugRepository) {
                                 modifier = Modifier
                                     .size(200.dp)
                                     .fillMaxSize(),
-                                colorFilter = ColorFilter.tint(Color(0xDF0D80DB))
+                                colorFilter = ColorFilter.tint(Color(0xFF7AC239))
                             )
                         }
                         Text(
                             text = "해충을 찍어주세요!",
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xDF0D80DB)
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF7AC239)
                         )
                         Text(
-                            text = "최대한 조심히 가까이 찍어주세요. 도망가지 않게",
-                            fontWeight = FontWeight.ExtraLight,
-                            color = Color(0xDF0D80DB)
+                            text = "최대한 조심히 가까이 찍어주세요.",
+                            fontWeight = FontWeight.Light,
+                            color = Color(0xFF7AC239)
+                        )
+                        Text(
+                            text ="도망가지 않게",
+                            fontWeight = FontWeight.Light,
+                            color = Color(0xFF7AC239)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         Row(
@@ -149,10 +154,10 @@ fun MainScreen(navController: NavController, bugRepository: BugRepository) {
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             OutlinedButton(
-                                border = BorderStroke(1.dp, Color(0xDF0D80DB)),
+                                border = BorderStroke(1.dp, Color(0xFF7AC239)),
                                 colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = Color.White,
-                                    contentColor = Color(0xDF0D80DB)
+                                    contentColor = Color(0xFF7AC239)
                                 ),
                                 onClick = {
                                     launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -169,7 +174,7 @@ fun MainScreen(navController: NavController, bugRepository: BugRepository) {
                                     cameraLauncher.launch(null)
                                 },
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xDF0D80DB),
+                                    containerColor = Color(0xFF7AC239),
                                     contentColor = Color.White
                                 )
                             ) {
@@ -188,30 +193,36 @@ fun MainScreen(navController: NavController, bugRepository: BugRepository) {
                             .fillMaxSize(),
                         contentAlignment = Alignment.BottomCenter,
                     ) {
-                        Button(onClick = {
-                            if (selectUri != null) {
-                                val imageUri = selectUri.toString()
-                                loading = true
-                                scope.launch {
-                                    pred = apiManager.uploadImage(
-                                        context,
-                                        Uri.parse(imageUri)
-                                    )
-                                    if (pred.first != null && pred.second != null) {
-                                        bugRepository.insertInferenceInfo(
-                                            Inference(
-                                                imageUri = imageUri,
-                                                bugType = pred.first,
-                                                accuracy = pred.second
-                                            )
+                        Button(
+                            onClick = {
+                                if (selectUri != null) {
+                                    val imageUri = selectUri.toString()
+                                    loading = true
+                                    scope.launch {
+                                        pred = apiManager.uploadImage(
+                                            context,
+                                            Uri.parse(imageUri)
                                         )
-                                        navController.navigate(Screen.Inference.route + "/${pred.first}")
-                                        loading = false
+                                        if (pred.first != null && pred.second != null) {
+                                            bugRepository.insertInferenceInfo(
+                                                Inference(
+                                                    imageUri = imageUri,
+                                                    bugType = pred.first,
+                                                    accuracy = pred.second
+                                                )
+                                            )
+                                            navController.navigate(Screen.Inference.route + "/${pred.first}")
+                                            loading = false
+                                        }
                                     }
                                 }
-                            }
-                        }) {
-                            Text(text = "예측")
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF7AC239),
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text(text = "분석", fontWeight = FontWeight.Bold)
                         }
                     }
                 }

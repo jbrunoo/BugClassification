@@ -66,7 +66,7 @@ fun MyScaffold(navController: NavController, content: @Composable (PaddingValues
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomAppBar(
-                modifier = Modifier.border(0.5.dp, Color(color = 0xB281C5FC)),
+                modifier = Modifier.border(0.5.dp, Color(0xFFB3F379)),
                 containerColor = Color.White,
                 content = {
                     Row(
@@ -78,7 +78,7 @@ fun MyScaffold(navController: NavController, content: @Composable (PaddingValues
                                 modifier = Modifier.size(32.dp),
                                 imageVector = Icons.Outlined.Settings,
                                 contentDescription = null,
-                                tint = Color(color = 0xDF0D80DB)
+                                tint = Color(0xFF7AC239)
                             )
                         }
 
@@ -86,7 +86,7 @@ fun MyScaffold(navController: NavController, content: @Composable (PaddingValues
                             Icon(
                                 modifier = Modifier.size(32.dp),
                                 imageVector = Icons.Outlined.Home, contentDescription = null,
-                                tint = Color(color = 0xDF0D80DB)
+                                tint = Color(0xFF7AC239)
                             )
                         }
 
@@ -97,7 +97,7 @@ fun MyScaffold(navController: NavController, content: @Composable (PaddingValues
                                 modifier = Modifier.size(32.dp),
                                 imageVector = Icons.Outlined.ImportContacts,
                                 contentDescription = null,
-                                tint = Color(0xDF0D80DB)
+                                tint = Color(0xFF7AC239)
                             )
                         }
                     }

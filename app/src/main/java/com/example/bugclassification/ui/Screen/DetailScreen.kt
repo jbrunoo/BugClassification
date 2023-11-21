@@ -3,6 +3,7 @@ package com.example.bugclassification.ui.Screen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -51,88 +52,80 @@ fun DetailScreen(navController: NavController, bugType: String?, bugRepository: 
 
     // 상세보기 눌렀을 때 나오는 값 가져와서 firebase에 저장된 detail 한 정보들 출력
     MyScaffold(navController = navController) {
-        LazyColumn(
-            modifier = Modifier
-                .padding(it)
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            item {
-                GlideImage(
-                    modifier = Modifier.size(250.dp),
-                    imageModel = { inference?.imageUri }, // loading a network image using an URL.
-                    imageOptions = ImageOptions(
-                        contentScale = ContentScale.Crop,
-                        alignment = Alignment.Center
+            LazyColumn(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    GlideImage(
+                        modifier = Modifier.size(250.dp),
+                        imageModel = { inference?.imageUri }, // loading a network image using an URL.
+                        imageOptions = ImageOptions(
+                            contentScale = ContentScale.Crop,
+                            alignment = Alignment.Center
+                        )
                     )
-                )
-            }
-            item {
-                Card(
-                    border = BorderStroke(1.dp, color = Color.Gray)
-                ) {
+                }
+                item {
                     Text(
                         text = bug?.bugType ?: "no-data",
                         textAlign = TextAlign.Center,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.Bold
                     )
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                item {
+                    Text(
+                        text = "종", fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = bug?.bugTitle ?: "no-data",
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    Text(
+                        text = "정보", fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = bug?.bugInfo ?: "no-data")
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    Text(
+                        text = "서식지", fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = bug?.bugHab ?: "no-data")
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    Text(
+                        text = "예방 방법", fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = bug?.bugPrev ?: "no-data")
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    Text(
+                        text = "퇴치 방법", fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = bug?.bugExt ?: "no-data")
+                }
             }
-            item {
-                Text(
-                    text = "종", fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = bug?.bugTitle ?: "no-data",
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-            item {
-                Text(
-                    text = "정보", fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(text = bug?.bugInfo ?: "no-data")
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-            item {
-                Text(
-                    text = "서식지", fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(text = bug?.bugHab ?: "no-data")
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-            item {
-                Text(
-                    text = "예방 방법", fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(text = bug?.bugPrev ?: "no-data")
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-            item {
-                Text(
-                    text = "퇴치 방법", fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(text = bug?.bugExt ?: "no-data")
-                Spacer(modifier = Modifier.height(40.dp))
-            }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .padding(16.dp),
-            contentAlignment = Alignment.BottomCenter,
-        ) {
+            Spacer(modifier = Modifier.height(10.dp))
             BottomRow(navController, bugType)
         }
     }

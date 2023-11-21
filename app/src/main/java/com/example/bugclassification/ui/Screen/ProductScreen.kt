@@ -45,7 +45,6 @@ fun ProductScreen(navController: NavController, bugType: String?) {
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-
             ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -55,10 +54,10 @@ fun ProductScreen(navController: NavController, bugType: String?) {
                     painter = painterResource(id = R.drawable.bug_image), contentDescription = null,
                     modifier = Modifier.size(50.dp)
                 )
-                Text(text = "살충제 제품", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+                Text(text = "살충제 제품", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             }
             if (bugType != null) {
-                Text(text = bugType, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                Text(text = bugType, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
         Box(
@@ -79,7 +78,7 @@ fun ProductScreen(navController: NavController, bugType: String?) {
                             .clickable {
                                 OpenLinkInBrowser(context, arg.url)
                             },
-                        colors = CardDefaults.cardColors(containerColor = Color(0xDF0D80DB))
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF7AC239))
                     ) {
                         Column(
                             modifier = Modifier.fillMaxSize(),

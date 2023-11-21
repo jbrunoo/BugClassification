@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoadingAnimation(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier,
     circlesize: Dp = 25.dp,
-    circleColor: Color = Color.Blue,
+    circleColor: Color = Color(0xFFB3F379),
     spaceBetween: Dp = 10.dp,
     travelDistance: Dp = 20.dp
 ) {

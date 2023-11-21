@@ -50,7 +50,7 @@ fun BottomRow(navController: NavController, bugType: String?) {
                     bottomEnd = 0.dp
                 ),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xDF0D80DB),
+                    containerColor = Color(0xFF7AC239),
                     contentColor = Color.White
                 )
             ) {
